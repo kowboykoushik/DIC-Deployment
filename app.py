@@ -196,7 +196,7 @@ if input_option == "Single Record":
         return distances
 
     st.header("Distance Plot")
-    distances = compute_distances(preprocess_inputs.values[0], df_processed.drop('target', axis=1).values)
+    distances = compute_distances(preprocess_inputs.values, df_processed.values)
     fig_distance, ax_distance = plt.subplots(figsize=(10, 6))
     ax_distance.bar(range(len(distances)), distances, color='green', alpha=0.7)
     ax_distance.set_xlabel("Instance Index")
