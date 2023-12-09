@@ -11,6 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # Load the dataset
 # Assuming 'df' is your original dataset
@@ -129,7 +130,7 @@ elif input_option == "CSV File":
         st.warning("Please upload a CSV file.")
 
 # Make predictions using the loaded model
-if (input_option == "CSV File" and uploaded_file is not None) or input_option == "Single Record": 
+if (input_option == "CSV File" and uploaded_file is not None) or input_option == "Single Record":
     # Perform preprocessing on the uploaded data
     preprocess_inputs, unpreprocess_inputs = preprocess(user_inputs)
     st.write("Preprocessed Input")
@@ -139,7 +140,7 @@ if (input_option == "CSV File" and uploaded_file is not None) or input_option ==
     # Display predictions and user inputs in a table
     st.subheader("Model Prediction and User Inputs")
     st.write("Note: In case any column or field has wrong data then the record may not be predicted")
-    st.write("Note: In case your dataset has ground truth in column target then it can be compared with predicted value under column Prediction") 
+    st.write("Note: In case your dataset has ground truth in column target then it can be compared with predicted value under column Prediction")
     result_df = unpreprocess_inputs
     result_df["Prediction"] = prediction
     predictor_mapping = {0: 'censoring', 1: 'failure'}
@@ -147,11 +148,13 @@ if (input_option == "CSV File" and uploaded_file is not None) or input_option ==
     result_df["Prediction"] = result_df["Prediction"].map(predictor_mapping)
     st.write(result_df)
 
-    if st.checkbox("Show Data Visualization"):
-        # Add your data visualization code here based on the prediction or other relevant data
-        # Example: Plotting a bar chart of the target variable
-        fig = plt.figure(figsize=(8, 6))
-        sns.countplot(x="Prediction", data=result_df)
-        st.pyplot(fig)
-
-# You can add more components, visualizations, and interactivity as needed
+    # Comparison Bar Chart
+    st.header("Comparison Bar Chart")
+    fig_compare, ax_compare = plt.subplots(figsize=(10, 6))
+    result_df['target'] = df_processed['target']  # Assuming 'target' is the actual target variable in your dataset
+    comparison_data = result_df[['target', 'Prediction']].value_counts().unstack()
+    comparison_data.plot(kind='bar', stacked=True, ax=ax_compare)
+    ax_compare.set_xlabel("Class")
+    ax_compare.set_ylabel("Count")
+    ax_compare.set_title("Actual vs Predicted Comparison")
+    st.pyplot(fig_compare)
