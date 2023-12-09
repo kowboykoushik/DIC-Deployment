@@ -197,9 +197,20 @@ if input_option == "Single Record":
 
     st.header("Distance Plot")
     distances = compute_distances(preprocess_inputs.values, df_processed.values)
-    fig_distance, ax_distance = plt.subplots(figsize=(10, 6))
+    '''fig_distance, ax_distance = plt.subplots(figsize=(10, 6))
     ax_distance.bar(range(len(distances)), distances, color='green', alpha=0.7)
     ax_distance.set_xlabel("Instance Index")
     ax_distance.set_ylabel("Distance or Similarity")
     ax_distance.set_title("Distance Plot for Input Instance")
-    st.pyplot(fig_distance)
+    st.pyplot(fig_distance)'''
+    # Binning distances
+    bins = np.arange(0, np.max(distances) + 1, 1)  # Adjust the bin size based on your data
+    binned_counts, bin_edges = np.histogram(distances, bins=bins)
+    
+    # Display the pie chart
+    st.header("Binned Distance Pie Chart")
+    fig_pie, ax_pie = plt.subplots(figsize=(8, 8))
+    ax_pie.pie(binned_counts, labels=[f'{edge:.1f}-{edge_next:.1f}' for edge, edge_next in zip(bin_edges[:-1], bin_edges[1:])], autopct='%1.1f%%', startangle=140)
+    ax_pie.axis('equal')  # Equal aspect ratio ensures the pie chart is circular.
+    ax_pie.set_title("Binned Distances Pie Chart")
+    st.pyplot(fig_pie)
