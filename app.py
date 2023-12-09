@@ -148,15 +148,28 @@ if (input_option == "CSV File" and uploaded_file is not None) or input_option ==
     result_df["Prediction"] = result_df["Prediction"].map(predictor_mapping)
     st.write(result_df)
 
+    # Comparison Bar Chart
+    st.header("Comparison Bar Chart")
+    fig_compare, ax_compare = plt.subplots(figsize=(10, 6))
+    comparison_data = result_df[['target', 'Prediction']].value_counts().unstack()
+    comparison_data.plot(kind='bar', stacked=True, ax=ax_compare)
+    ax_compare.set_xlabel("Class")
+    ax_compare.set_ylabel("Count")
+    ax_compare.set_title("Actual vs Predicted Comparison")
+    st.pyplot(fig_compare)
+
     # Comparison Count Plot
     st.header("Comparison Count Plot")
     fig_compare_count, ax_compare_count = plt.subplots(figsize=(10, 6))
 
     # Assuming 'target' is the actual target variable in your dataset
     sns.countplot(x='target', data=result_df, label='Actual', ax=ax_compare_count, color='blue', alpha=0.7)
+
+    # Assuming 'Prediction' is the predicted values
+    sns.countplot(x='Prediction', data=result_df, label='Predicted', ax=ax_compare_count, color='orange', alpha=0.7)
+
     ax_compare_count.set_xlabel("Class")
     ax_compare_count.set_ylabel("Count")
     ax_compare_count.set_title("Actual vs Predicted Comparison")
     ax_compare_count.legend()
     st.pyplot(fig_compare_count)
-   
