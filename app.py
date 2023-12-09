@@ -130,7 +130,7 @@ elif input_option == "CSV File":
         st.warning("Please upload a CSV file.")
 
 # Make predictions using the loaded model
-if (input_option == "CSV File" and uploaded_file is not None) or input_option == "Single Record": 
+if (input_option == "CSV File" and uploaded_file is not None): 
     # Perform preprocessing on the uploaded data
     preprocess_inputs, unpreprocess_inputs = preprocess(user_inputs)
     st.write("Preprocessed Input")
@@ -173,6 +173,23 @@ if (input_option == "CSV File" and uploaded_file is not None) or input_option ==
     ax_compare_count.set_title("Actual vs Predicted Comparison")
     ax_compare_count.legend()
     st.pyplot(fig_compare_count)
+if input_option == "Single Record": 
+    # Perform preprocessing on the uploaded data
+    preprocess_inputs, unpreprocess_inputs = preprocess(user_inputs)
+    st.write("Preprocessed Input")
+    st.write(preprocess_inputs)
+    prediction = loaded_model.predict(preprocess_inputs)
+
+    # Display predictions and user inputs in a table
+    st.subheader("Model Prediction and User Inputs")
+    st.write("Note: In case any column or field has wrong data then the record may not be predicted")
+    st.write("Note: In case your dataset has ground truth in column target then it can be compared with predicted value under column Prediction") 
+    result_df = unpreprocess_inputs
+    result_df["Prediction"] = prediction
+    predictor_mapping = {0: 'censoring', 1: 'failure'}
+    # Map values in the 'Status' column
+    result_df["Prediction"] = result_df["Prediction"].map(predictor_mapping)
+    st.write(result_df)
 
     def compute_distances(input_instance, dataset, metric='euclidean'):
         distances = np.linalg.norm(dataset - input_instance, axis=1, ord=2)
