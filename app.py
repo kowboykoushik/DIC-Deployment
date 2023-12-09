@@ -18,7 +18,7 @@ import numpy as np
 df = pd.read_csv("hiv.csv")
 
 # Perform preprocessing
-df_processed = preprocess(df)
+df_processed, df_unprocessed = preprocess(df)
 
 # Title of the app
 st.title("AIDS Mortality Prediction using Clinical Trial Data")
@@ -196,7 +196,7 @@ if input_option == "Single Record":
         return distances
 
     st.header("Distance Plot")
-    distances = compute_distances(preprocess_inputs.values, preprocess_inputs.values)
+    distances = compute_distances(preprocess_inputs.values, df_processed.values)
     fig_distance, ax_distance = plt.subplots(figsize=(10, 6))
     ax_distance.bar(range(len(distances)), distances, color='green', alpha=0.7)
     ax_distance.set_xlabel("Instance Index")
