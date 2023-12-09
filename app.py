@@ -173,3 +173,16 @@ if (input_option == "CSV File" and uploaded_file is not None) or input_option ==
     ax_compare_count.set_title("Actual vs Predicted Comparison")
     ax_compare_count.legend()
     st.pyplot(fig_compare_count)
+
+    def compute_distances(input_instance, dataset, metric='euclidean'):
+        distances = np.linalg.norm(dataset - input_instance, axis=1, ord=2)
+        return distances
+
+    st.header("Distance Plot")
+    distances = compute_distances(preprocess_inputs.values[0], df_processed.drop('target', axis=1).values)
+    fig_distance, ax_distance = plt.subplots(figsize=(10, 6))
+    ax_distance.bar(range(len(distances)), distances, color='green', alpha=0.7)
+    ax_distance.set_xlabel("Instance Index")
+    ax_distance.set_ylabel("Distance or Similarity")
+    ax_distance.set_title("Distance Plot for Input Instance")
+    st.pyplot(fig_distance)
