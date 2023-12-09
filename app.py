@@ -163,8 +163,7 @@ if (input_option == "CSV File" and uploaded_file is not None):
         distances = np.linalg.norm(dataset - input_instance, axis=1, ord=2)
         return distances
 
-    st.header("Distance Plot")
-    #distances = compute_distances(preprocess_inputs.values, df_processed.values)
+    st.header("Binned Distance Pie Chart")
     all_distances = [compute_distances(instance, df_processed.values) for instance in preprocess_inputs.values]
 
     # Concatenate all distances into a single array
@@ -175,7 +174,6 @@ if (input_option == "CSV File" and uploaded_file is not None):
     binned_counts, bin_edges = np.histogram(distances, bins=bins)
     
     # Display the pie chart
-    st.header("Binned Distance Pie Chart")
     fig_pie, ax_pie = plt.subplots(figsize=(8, 8))
     ax_pie.pie(binned_counts, labels=[f'{edge:.1f}-{edge_next:.1f}' for edge, edge_next in zip(bin_edges[:-1], bin_edges[1:])], autopct='%1.1f%%', startangle=140)
     ax_pie.axis('equal')  # Equal aspect ratio ensures the pie chart is circular.
