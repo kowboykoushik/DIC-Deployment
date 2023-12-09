@@ -130,7 +130,7 @@ elif input_option == "CSV File":
         st.warning("Please upload a CSV file.")
 
 # Make predictions using the loaded model
-if (input_option == "CSV File" and uploaded_file is not None) or input_option == "Single Record":
+if (input_option == "CSV File" and uploaded_file is not None) or input_option == "Single Record": 
     # Perform preprocessing on the uploaded data
     preprocess_inputs, unpreprocess_inputs = preprocess(user_inputs)
     st.write("Preprocessed Input")
@@ -140,7 +140,7 @@ if (input_option == "CSV File" and uploaded_file is not None) or input_option ==
     # Display predictions and user inputs in a table
     st.subheader("Model Prediction and User Inputs")
     st.write("Note: In case any column or field has wrong data then the record may not be predicted")
-    st.write("Note: In case your dataset has ground truth in column target then it can be compared with predicted value under column Prediction")
+    st.write("Note: In case your dataset has ground truth in column target then it can be compared with predicted value under column Prediction") 
     result_df = unpreprocess_inputs
     result_df["Prediction"] = prediction
     predictor_mapping = {0: 'censoring', 1: 'failure'}
@@ -148,13 +148,15 @@ if (input_option == "CSV File" and uploaded_file is not None) or input_option ==
     result_df["Prediction"] = result_df["Prediction"].map(predictor_mapping)
     st.write(result_df)
 
-    # Comparison Bar Chart
-    st.header("Comparison Bar Chart")
-    fig_compare, ax_compare = plt.subplots(figsize=(10, 6))
-    result_df['target'] = df_processed['target']  # Assuming 'target' is the actual target variable in your dataset
-    comparison_data = result_df[['target', 'Prediction']].value_counts().unstack()
-    comparison_data.plot(kind='bar', stacked=True, ax=ax_compare)
-    ax_compare.set_xlabel("Class")
-    ax_compare.set_ylabel("Count")
-    ax_compare.set_title("Actual vs Predicted Comparison")
-    st.pyplot(fig_compare)
+    # Comparison Count Plot
+    st.header("Comparison Count Plot")
+    fig_compare_count, ax_compare_count = plt.subplots(figsize=(10, 6))
+
+    # Assuming 'target' is the actual target variable in your dataset
+    sns.countplot(x='target', data=result_df, label='Actual', ax=ax_compare_count, color='blue', alpha=0.7)
+    ax_compare_count.set_xlabel("Class")
+    ax_compare_count.set_ylabel("Count")
+    ax_compare_count.set_title("Actual vs Predicted Comparison")
+    ax_compare_count.legend()
+    st.pyplot(fig_compare_count)
+   
