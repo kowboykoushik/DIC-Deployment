@@ -165,7 +165,7 @@ if (input_option == "CSV File" and uploaded_file is not None):
 
     st.header("Distance Plot")
     #distances = compute_distances(preprocess_inputs.values, df_processed.values)
-    all_distances = [compute_distances(instance, df_processed.drop('target', axis=1).values) for instance in preprocess_inputs.values]
+    all_distances = [compute_distances(instance, df_processed.values) for instance in preprocess_inputs.values]
 
     # Concatenate all distances into a single array
     distances = np.concatenate(all_distances)
