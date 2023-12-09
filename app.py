@@ -149,30 +149,38 @@ if (input_option == "CSV File" and uploaded_file is not None):
     st.write(result_df)
 
     # Comparison Bar Chart
-    st.header("Comparison Bar Chart")
-    fig_compare, ax_compare = plt.subplots(figsize=(10, 6))
-    comparison_data = result_df[['target', 'Prediction']].value_counts().unstack()
-    comparison_data.plot(kind='bar', stacked=True, ax=ax_compare)
-    ax_compare.set_xlabel("Class")
-    ax_compare.set_ylabel("Count")
-    ax_compare.set_title("Actual vs Predicted Comparison")
-    st.pyplot(fig_compare)
+    if 'target' in user_inputs.columns:
+        st.header("Comparison Bar Chart")
+        fig_compare, ax_compare = plt.subplots(figsize=(10, 6))
+        comparison_data = result_df[['target', 'Prediction']].value_counts().unstack()
+        comparison_data.plot(kind='bar', stacked=True, ax=ax_compare)
+        ax_compare.set_xlabel("Class")
+        ax_compare.set_ylabel("Count")
+        ax_compare.set_title("Actual vs Predicted Comparison")
+        st.pyplot(fig_compare)
 
-    # Comparison Count Plot
-    st.header("Comparison Count Plot")
-    fig_compare_count, ax_compare_count = plt.subplots(figsize=(10, 6))
+    def compute_distances(input_instance, dataset, metric='euclidean'):
+        distances = np.linalg.norm(dataset - input_instance, axis=1, ord=2)
+        return distances
 
-    # Assuming 'target' is the actual target variable in your dataset
-    sns.countplot(x='target', data=result_df, label='Actual', ax=ax_compare_count, color='blue', alpha=0.7)
+    st.header("Distance Plot")
+    #distances = compute_distances(preprocess_inputs.values, df_processed.values)
+    all_distances = [compute_distances(instance, df_processed.drop('target', axis=1).values) for instance in preprocess_inputs.values]
 
-    # Assuming 'Prediction' is the predicted values
-    sns.countplot(x='Prediction', data=result_df, label='Predicted', ax=ax_compare_count, color='orange', alpha=0.7)
+    # Concatenate all distances into a single array
+    distances = np.concatenate(all_distances)
 
-    ax_compare_count.set_xlabel("Class")
-    ax_compare_count.set_ylabel("Count")
-    ax_compare_count.set_title("Actual vs Predicted Comparison")
-    ax_compare_count.legend()
-    st.pyplot(fig_compare_count)
+    # Binning distances
+    bins = np.arange(0, np.max(distances) + 1, 1)  # Adjust the bin size based on your data
+    binned_counts, bin_edges = np.histogram(distances, bins=bins)
+    
+    # Display the pie chart
+    st.header("Binned Distance Pie Chart")
+    fig_pie, ax_pie = plt.subplots(figsize=(8, 8))
+    ax_pie.pie(binned_counts, labels=[f'{edge:.1f}-{edge_next:.1f}' for edge, edge_next in zip(bin_edges[:-1], bin_edges[1:])], autopct='%1.1f%%', startangle=140)
+    ax_pie.axis('equal')  # Equal aspect ratio ensures the pie chart is circular.
+    ax_pie.set_title("Binned Distances Pie Chart")
+    st.pyplot(fig_pie)
 if input_option == "Single Record": 
     # Perform preprocessing on the uploaded data
     preprocess_inputs, unpreprocess_inputs = preprocess(user_inputs)
@@ -197,12 +205,6 @@ if input_option == "Single Record":
 
     st.header("Distance Plot")
     distances = compute_distances(preprocess_inputs.values, df_processed.values)
-    '''fig_distance, ax_distance = plt.subplots(figsize=(10, 6))
-    ax_distance.bar(range(len(distances)), distances, color='green', alpha=0.7)
-    ax_distance.set_xlabel("Instance Index")
-    ax_distance.set_ylabel("Distance or Similarity")
-    ax_distance.set_title("Distance Plot for Input Instance")
-    st.pyplot(fig_distance)'''
     # Binning distances
     bins = np.arange(0, np.max(distances) + 1, 1)  # Adjust the bin size based on your data
     binned_counts, bin_edges = np.histogram(distances, bins=bins)
