@@ -1,0 +1,11 @@
+﻿pid,time,trt,age,wtkg,hemo,homo,drugs,karnof,oprior,z30,zprior,preanti,race,gender,strat,symptom,treat,offtrt,cd40,cd420,cd80,cd820,str2
+1,1189,ZDV + Zal,20,67.2,No,Yes,No,90,No,Yes,Yes,86,White,Male,29,asymp,others,No,537,509,736,679,experienced
+2,1176,ddl only,29,78.4728,No,Yes,No,90,No,No,Yes,0,Non White,Male,0,asymp,others,Yes,229,249,688,611,naive
+3,484,ddl only,37,78.0192,No,Yes,Yes,90,No,Yes,Yes,152,White,Male,49,symp,others,No,384,208,1537,1057,experienced
+4,1173,ZDV + ddl,30,81.8748,No,Yes,No,100,No,No,Yes,0,White,Male,0,asymp,others,No,476,496,1315,1250,naive
+5,1167,ZDV + ddl,33,80.514,No,Yes,No,90,No,Yes,Yes,90,Non White,Male,38,asymp,others,No,246,365,1574,1740,experienced
+6,641,ZDV + ddl,33,76.2048,No,Yes,No,90,No,No,Yes,0,White,Male,0,asymp,others,Yes,1199,565,509,348,naive
+7,1126,ZDV only,37,76.6584,No,Yes,nah,90,No,No,Yes,0,White,Male,0,asymp,ZDV only,No,416,467,1420,1454,naive
+8,1138,ZDV + Zal,26,65.3184,Yes,No,No,80,No,No,Yes,0,White,Male,0,asymp,others,No,336,356,516,585,naive
+9,1069,ZDV + ddl,30,81.3,No,Yes,No,90,No,No,Yes,0,White,Male,0,asymp,others,No,418,450,1722,1043,naive
+10,319,ZDV + ddl,23,78.4728,No,Yes,No,100,No,Yes,Yes,238,White,Male,27,asymp,others,Yes,168,246,512,1214,experienced
