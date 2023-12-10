@@ -155,7 +155,7 @@ if (input_option == "CSV File" and uploaded_file is not None):
             "XGBoost Model": "xgboost.png"
         }
     if selected_model in img_paths.keys():
-        st.write("Feature Importance Plot")
+        st.header("Feature Importance Plot")
         st.image(img_paths.get(selected_model), use_column_width=False)
 
     # Comparison Bar Chart
