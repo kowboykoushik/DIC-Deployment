@@ -218,7 +218,7 @@ if input_option == "Single Record":
         "XGBoost Model": "xgboost.png"
     }
     if selected_model in img_paths.keys():
-        st.write("Feature Importance Plot")
+        st.header("Feature Importance Plot")
         st.image(img_paths.get(selected_model), use_column_width=False)    
 
     def compute_distances(input_instance, dataset, metric='euclidean'):
