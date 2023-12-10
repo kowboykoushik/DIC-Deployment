@@ -170,7 +170,7 @@ if (input_option == "CSV File" and uploaded_file is not None):
         st.pyplot(fig_compare)
     else:
         st.header("Output Class Counts")
-        fig,ax = plt.figure(figsize=(8, 6))
+        fig = plt.figure(figsize=(8, 6))
         sns.countplot(x="Prediction", data=result_df)
         st.pyplot(fig)
 
