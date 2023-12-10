@@ -35,11 +35,11 @@ st.sidebar.write(f"Shape of the dataset: {df.shape}")
 st.sidebar.write(f"Number of classes: {len(df['target'].unique())}")
 
 # Allow user to choose a model
-selected_model = st.sidebar.selectbox("Select a Model", ["Linear Regression Model", "K Nearest Neighbors Model", "Support Vector Machine Model", "Decision Tree Classifier Model", "Random Forest Classifier Model", "XGBoost Model"])
+selected_model = st.sidebar.selectbox("Select a Model", ["Logistic Regression Model", "K Nearest Neighbors Model", "Support Vector Machine Model", "Decision Tree Classifier Model", "Random Forest Classifier Model", "XGBoost Model"])
 
 # Define a dictionary mapping model names to their file paths
 model_paths = {
-    "Linear Regression Model": "lr_model.pkl",
+    "Logistic Regression Model": "lr_model.pkl",
     "K Nearest Neighbors Model": "knn_model.pkl",
     "Support Vector Machine Model": "svm_model.pkl",
     "Decision Tree Classifier Model": "dt_model.pkl",
@@ -148,6 +148,16 @@ if (input_option == "CSV File" and uploaded_file is not None):
     result_df["Prediction"] = result_df["Prediction"].map(predictor_mapping)
     st.write(result_df)
 
+    img_paths = {
+            "Logistic Regression Model": "logreg.png",
+            "Decision Tree Classifier Model": "dectree.png",
+            "Random Forest Classifier Model": "randomforest.png",
+            "XGBoost Model": "xgboost.png"
+        }
+    if selected_model in img_paths.keys():
+        st.write("Feature Importance Plot")
+        st.image(img_paths.get(selected_model), use_column_width=False)
+
     # Comparison Bar Chart
     if 'target' in user_inputs.columns:
         st.header("Comparison Bar Chart")
@@ -158,6 +168,11 @@ if (input_option == "CSV File" and uploaded_file is not None):
         ax_compare.set_ylabel("Count")
         ax_compare.set_title("Actual vs Predicted Comparison")
         st.pyplot(fig_compare)
+    else:
+        st.header("Output Class Counts")
+        fig,ax = plt.figure(figsize=(8, 6))
+        sns.countplot(x="Prediction", data=result_df)
+        st.pyplot(fig)
 
     def compute_distances(input_instance, dataset, metric='euclidean'):
         distances = np.linalg.norm(dataset - input_instance, axis=1, ord=2)
@@ -196,6 +211,15 @@ if input_option == "Single Record":
     # Map values in the 'Status' column
     result_df["Prediction"] = result_df["Prediction"].map(predictor_mapping)
     st.write(result_df)
+    img_paths = {
+        "Logistic Regression Model": "logreg.png",
+        "Decision Tree Classifier Model": "dectree.png",
+        "Random Forest Classifier Model": "randomforest.png",
+        "XGBoost Model": "xgboost.png"
+    }
+    if selected_model in img_paths.keys():
+        st.write("Feature Importance Plot")
+        st.image(img_paths.get(selected_model), use_column_width=False)    
 
     def compute_distances(input_instance, dataset, metric='euclidean'):
         distances = np.linalg.norm(dataset - input_instance, axis=1, ord=2)
